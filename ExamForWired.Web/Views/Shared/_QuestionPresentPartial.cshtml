@@ -1,0 +1,11 @@
+﻿@using ExamForWired.Models
+@model QuestionModel
+
+@{
+    ViewData["QuestionId"] = Model.Id;
+    <div class="col-md-6">
+        <p>@Model.Content</p>
+        <br />
+        @{await Html.RenderPartialAsync("_AnswersPartial", Model.Answers);}
+    </div>
+}

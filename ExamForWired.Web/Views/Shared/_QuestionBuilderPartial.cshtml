@@ -1,0 +1,52 @@
+﻿@using HtmlHelpers.BeginCollectionItemCore
+@using ExamForWired.Models
+@model QuestionModel
+@{string[] placeHolders = new string[] { "A", "B", "C", "D" };}
+@for (int i = 0; i < 4; i++)
+{
+    <div class="row mb-2">
+        @Html.TextBox($"Exam.Questions[{i}].Content", null, new { @class = "col-sm-12", placeholder = $"Soru {i + 1}" })
+    </div>
+
+    <div class="container">
+        @for (int j = 0; j < 4; j++)
+        {
+            @if (j == 0 || j == 2)
+            {
+                @:<div class="row mb-2">
+                }
+
+            @Html.TextBox($"Exam.Questions[{i}].Answers[{j}].Content", null, new { @class = "col-sm-6", data_answerindis = j, data_option = $"{placeHolders[j]}", placeholder = $"{placeHolders[j]})" })
+            @Html.Hidden($"Exam.Questions[{i}].Answers[{j}].IsCorrectAnswer")
+            @if (j == 1 || j == 3)
+            {
+            @:</div>
+        }
+        }
+    </div>
+    <div class="container">
+        <div class="row">
+            <div style="text-align:center;margin:auto">
+                @Html.DropDownList("CorrectAnswerString", new List<SelectListItem>
+           {
+               new SelectListItem{Text="A",Value="A"},
+               new SelectListItem{Text="B",Value="B"},
+               new SelectListItem{Text="C",Value="C"},
+               new SelectListItem{Text="D",Value="D"}
+           }, optionLabel: "Doğru Cevap Seç", new { onchange = @$"onCorrectAnswerChange(this.value,{i})" })
+            </div>
+        </div>
+    </div>
+    <br />
+}
+<script>
+    function onCorrectAnswerChange(val, questionindis) {
+        $(`input[id^="Exam_Questions_${questionindis}"]`).each(function () {
+            var answerindis = $(this).attr("data-answerindis");
+            if ($(`#Exam_Questions_${questionindis}__Answers_${answerindis}__Content`).attr("data-option") == val)
+                $(`#Exam_Questions_${questionindis}__Answers_${answerindis}__IsCorrectAnswer`).val(true)
+            else if ($(`#Exam_Questions_${questionindis}__Answers_${answerindis}__Content`).attr("data-option") != val)
+                $(`#Exam_Questions_${questionindis}__Answers_${answerindis}__IsCorrectAnswer`).val(false)
+        })
+    }
+</script>

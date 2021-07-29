@@ -1,0 +1,48 @@
+﻿@model List<ExamForWired.Models.ExamModel>
+@{
+    ViewData["Title"] = "ExamList";
+}
+<div>
+    <table id="examTable" class="table table-borderless">
+        <thead>
+            <tr style="border: solid 2px black">
+                <th scope="col">#</th>
+                <th scope="col">Başlık</th>
+                <th scope="col">Tarih</th>
+            </tr>
+        </thead>
+        @foreach (var item in Model)
+        {
+            <tbody>
+                <tr id="@item.Id" style="cursor:pointer">
+                    <th scope="row">
+                        @Html.DisplayFor(model => item.Id)
+                    </th>
+                    <td onclick="location.href = '@Url.Action("Start","Exam",new { id=item.Id})'">
+                        @Html.DisplayFor(model => item.Title)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(model => item.PubDate)
+                    </td>
+                    <td>
+                        <a href="#" onclick="deleteExam(@item.Id)" name="@item.Id">Sil</a>
+                    </td>
+                </tr>
+            </tbody>
+        }
+    </table>
+</div>
+@section Scripts{
+    <script>
+        function deleteExam(id) {
+            $.ajax({
+                url: "@Url.Action("delete","exam")",
+                type: "delete",
+                data: { id: id },
+                success: function () {
+                    $('#examTable tr#' + id).remove();
+                }
+            })
+        }
+    </script>
+}

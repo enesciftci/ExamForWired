@@ -1,0 +1,33 @@
+@page
+@model LoginModel
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="/css/site.css" type="text/css" asp-append-version="true" />
+</head>
+<div class="wrapper text-center">
+    <div class="col-md-8 divBorder">
+        <h1>Kullanici Giris</h1>
+            <form id="account" method="post" class="inputWrapper">
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <input asp-for="Input.Email" placeholder="Kullanýcý Adý" class="form-control" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input asp-for="Input.Password" placeholder="Þifre" class="form-control" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+                <div class="form-group text-right">
+                    <button type="submit" class="btn btn-primary">GÝRÝÞ YAP</button>
+                </div>
+                <div class="form-group">
+                    <p>
+                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Kayýt Ol</a>
+                    </p>
+                </div>
+            </form>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

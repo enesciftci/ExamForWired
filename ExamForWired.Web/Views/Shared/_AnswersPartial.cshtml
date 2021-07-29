@@ -1,0 +1,35 @@
+﻿@using ExamForWired.Models
+@model List<AnswerModel>
+@{string[] options = new string[] { "A)", "B)", "C)", "D)" };}
+@{
+    <ul id="question-@ViewData["QuestionId"]" class="ul-style">
+        @for (int i = 0; i < Model.Count; i++)
+        {
+            <li onclick="optionOnClick(@Model[i].Id,@ViewData["QuestionId"])" id="@Model[i].Id" class="li-style" data-questionid="@ViewData["QuestionId"]">@options[i] @Model[i].Content</li>
+        }
+    </ul>
+}
+<style>
+    .ul-style {
+        padding: 0
+    }
+
+    .li-style {
+        margin-bottom: 3px;
+        border: solid 1px;
+        cursor: pointer;
+    }
+</style>
+
+<script>
+    function optionOnClick(id, questionId) {
+        $(`ul#question-${questionId}.ul-style`).find('li').each(function () {
+            if ($(this).attr("id") == id) {
+                $(this).css("background-color", "orange")
+            }
+            else {
+                $(this).css("background-color", "transparent")
+            }
+        })
+    }
+</script>

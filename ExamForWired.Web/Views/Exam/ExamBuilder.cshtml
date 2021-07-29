@@ -1,0 +1,33 @@
+﻿@using ExamForWired.Models;
+@using HtmlHelpers.BeginCollectionItemCore;
+@model List<QuestionModel>
+
+@{
+    ViewData["Title"] = "ExamBuilder";
+}
+@{var articleList = (List<ArticleModel>)ViewBag.ArticleList; }
+
+@for (int i = 0; i < articleList.Count(); i++)
+{
+    var article = articleList[i];
+    @using (Html.BeginForm("create", "exam", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div id="container">
+            <p style="border: 1px solid">
+                <a data-toggle="collapse" data-target="#collapse@(i)">@article.Title</a>
+            </p>
+            <hr />
+            <div class="collapse" id="collapse@(i)">
+                @await Html.PartialAsync("_ArticlePartial", article)
+                <hr />
+                @{await Html.RenderPartialAsync("_QuestionBuilderPartial");}
+                <br />
+                <div class="text-center">
+                    <button class="btn btn-outline-secondary btn-lg">Sınav Oluştur</button>
+                </div>
+                <br />
+            </div>
+        </div>
+    }
+}

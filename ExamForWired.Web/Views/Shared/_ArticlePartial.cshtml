@@ -1,0 +1,7 @@
+﻿@using ExamForWired.Models;
+@model ArticleModel
+
+@Html.Raw(Model.Content)
+@Html.Hidden("Exam.Content", Model.Content)
+@Html.Hidden("Exam.Title", Model.Title)
+@Html.Hidden("Exam.PubDate", Model.PubDate)

@@ -1,0 +1,65 @@
+﻿@using ExamForWired.Models
+@model ExamModel
+@{
+    <div class="container">
+        <h1 class="text-center"> @Model.Title</h1>
+        <br />
+        <p class="text-center">@Html.Raw(@Model.Content)</p>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    @foreach (var question in Model.Questions)
+                    {
+                        await Html.RenderPartialAsync("_QuestionPresentPartial", question);
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="text-center mt-3">
+        <button type="submit" class="btn btn-outline-secondary btn-lg" onclick="finishExam()">SINAVI TAMAMLA</button>
+    </div>
+    <style>
+        ul {
+            list-style-type: none
+        }
+    </style>
+    <script>
+        function finishExam() {
+            var answerModels = new Array();
+            $('li').each(function (index) {
+                if ($(this).css("background-color") == "rgb(255, 165, 0)") {
+                    var answer = new Object();
+                    answer.id = $(this).attr("id");
+                    answer.questionId = $(this).attr("data-questionid");
+                    answerModels.push(answer);
+                }
+            })
+            $.post({
+                url: "@Url.Action("finish","exam")",
+                data: JSON.stringify(answerModels) ,
+                dataType: 'json',
+                contentType: 'application/json',
+                traditional: true,
+                success: function(res) {
+                    $('li').each(function (index) {
+                        if ($(this).css("background-color") == "rgb(255, 165, 0)") {
+                           var  id = $(this).attr("id");
+                            var questionId = $(this).attr("data-questionid");
+                            var answer = res.find(p => p.Id == id && p.QuestionId == questionId);
+                            console.log(answer)
+                            if (answer && answer.IsCorrectAnswer)
+                                $(this).css("background-color", "green")
+                            else
+                            $(this).css("background-color","red")
+                        }
+                    })
+                }
+            })
+        }
+    </script>
+}
+
+
